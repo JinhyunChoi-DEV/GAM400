@@ -1,29 +1,18 @@
-using System.Collections.Generic;
 
-public class StateMachine
+public interface IState<T> where T : IState<T>
 {
-    private IState currentState;
-    private IState prevState;
-    private List<IState> states;
+    void Enter();
 
-    //TODO: Do I need this functions?
-    public void Add(IState state)
-    { }
+    void Update();
 
-    //TODO: Do I need this functions?
-    public void Remove(IState state)
-    { }
+    void Exit();
+}
 
+public interface IStateMachine
+{
+    void Initialize();
+    void Update();
+    void FixedUpdate();
+    void Clear();
 
-    public void ChangeState(IState state)
-    {
-        prevState = currentState;
-        currentState = state;
-        currentState.Initialize();
-    }
-
-    public void Update()
-    {
-        currentState.Update();
-    }
 }

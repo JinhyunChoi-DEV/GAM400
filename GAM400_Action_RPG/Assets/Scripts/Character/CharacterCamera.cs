@@ -2,6 +2,12 @@ using Cinemachine;
 using UnityEngine;
 using Cursor = UnityEngine.Cursor;
 
+public struct CameraLookInfo
+{
+    public Vector3 forward;
+    public Vector3 right;
+}
+
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 public class CharacterCamera : MonoBehaviour
 {
@@ -15,17 +21,27 @@ public class CharacterCamera : MonoBehaviour
     private float rotateY = 0.0f;
     private float lerpSpeed = 5.0f;
 
+    public CameraLookInfo GetLook()
+    {
+        CameraLookInfo result;
+        result.forward = new Vector3(cameraTarget.forward.x, 0, cameraTarget.forward.z).normalized;
+        result.right = new Vector3(cameraTarget.right.x, 0, cameraTarget.right.z).normalized;
+
+        return result;
+    }
+
     void Awake()
     {
         vCamera = GetComponent<CinemachineVirtualCamera>();
 
         vCamera.Follow = cameraTarget;
         vCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.RoundRobin;
-        vCamera.m_Lens.FieldOfView = 90.0f;
+        vCamera.m_Lens.FieldOfView = 50.0f;
 
         var bodySetting = vCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         bodySetting.ShoulderOffset = Vector3.zero;
-        bodySetting.CameraDistance = 2.5f;
+        bodySetting.CameraDistance = 6.0f;
+        bodySetting.Damping = new Vector3(0.1f, 3.0f, 0.5f);
         bodySetting.IgnoreTag = "Player";
     }
 
@@ -35,7 +51,6 @@ public class CharacterCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-
     void FixedUpdate()
     {
         float axisX = Input.GetAxis("Mouse X");
@@ -43,9 +58,8 @@ public class CharacterCamera : MonoBehaviour
 
         // prevent tiny y axis movement
         if (Mathf.Abs(axisY) >= 0.2f)
-        {
             rotateX -= axisY * mouseRotationSpeed.y;
-        }
+
         rotateX = Mathf.Clamp(rotateX, mouseXLimitAngle.x, mouseXLimitAngle.y);
         rotateY += axisX * mouseRotationSpeed.x;
 
@@ -55,4 +69,5 @@ public class CharacterCamera : MonoBehaviour
 
         cameraTarget.rotation = Quaternion.Lerp(cameraTarget.rotation, newRotation, Time.deltaTime * lerpSpeed);
     }
+
 }
