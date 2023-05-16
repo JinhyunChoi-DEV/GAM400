@@ -58,10 +58,9 @@ public class CharacterMoveStateMachine
             current = MoveType.Landing;
 
         // check one frame more
-        else if (input.Jump || prev == MoveType.Jump)
-        {
+        else if ((input.Jump || prev == MoveType.Jump) && prev != MoveType.Landing)
             current = MoveType.Jump;
-        }
+        
 
         else if (input.Direction.magnitude != 0 && input.Sprint)
             current = MoveType.Sprint;
