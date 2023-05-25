@@ -13,6 +13,6 @@ public class VFXTestPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Mathf.Repeat(1, 1);
     }
 }
