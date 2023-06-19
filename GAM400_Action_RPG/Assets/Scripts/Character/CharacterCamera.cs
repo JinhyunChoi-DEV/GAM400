@@ -41,7 +41,7 @@ public class CharacterCamera : MonoBehaviour
         var bodySetting = vCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         bodySetting.ShoulderOffset = Vector3.zero;
         bodySetting.CameraDistance = 6.0f;
-        bodySetting.Damping = new Vector3(0.1f, 3.0f, 0.5f);
+        bodySetting.Damping = new Vector3(0.1f, 0.3f, 0.5f);
         bodySetting.IgnoreTag = "Player";
     }
 

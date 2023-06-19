@@ -24,4 +24,7 @@ public class CharacterData : ScriptableObject
     public float JumpPower { get { return jumpPower; } }
 
 
+    [Header("Slope")]
+    [SerializeField] private float maxSlope;
+    public float MaxSlope { get { return maxSlope; } }
 }

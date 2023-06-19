@@ -15,11 +15,11 @@ public class MoveStateFactory
     private LandingState landing;
     private JumpState jump;
 
-    public MoveStateFactory(CharacterData data, PlayerCharacterPhysics physics)
+    public MoveStateFactory(CharacterData data, PlayerCharacterPhysics physics, PlayerCharacter character)
     {
         idle = new IdleState(data);
-        walk = new WalkState(data, physics);
-        sprint = new SprintState(data, physics);
+        walk = new WalkState(data, physics, character);
+        sprint = new SprintState(data, physics, character);
         falling = new FallingState(data);
         landing = new LandingState(data);
         jump = new JumpState(data);

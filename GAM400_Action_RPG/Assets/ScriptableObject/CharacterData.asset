@@ -17,4 +17,5 @@ MonoBehaviour:
   gravity: 5
   gravityMultiplier: 0.5
   gravityTimer: 0.1
-  jumpPower: 7.5
+  jumpPower: 3
+  maxSlope: 0

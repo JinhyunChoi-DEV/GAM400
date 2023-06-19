@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Specialized;
+using Cinemachine.Utility;
+using UnityEngine;
 
 public struct MoveDirection
 {
@@ -11,26 +13,30 @@ public class PlayerCharacterPhysics : MonoBehaviour
     [SerializeField] private Rigidbody rigidbody;
     [SerializeField] private CapsuleCollider collider;
     [SerializeField] private CharacterData data;
+    [SerializeField] private PlayerCharacter character;
     [SerializeField] private float groundCheckOffset = 0.01f;
     public bool IsGround { get; private set; }
     public Vector3 Velocity { get; private set; }
 
+    public RaycastHit Hit { get; private set; }
+
     private Vector3 origin;
     private float radius;
 
-    public MoveDirection GetDirection()
-    {
-        //TODO: FIX 일단 테스트용
-        MoveDirection result;
-        result.Forward = collider.gameObject.transform.forward;
-        result.Right = collider.gameObject.transform.right;
-
-        return result;
-    }
-
     public void ApplyVelocity(Vector3 vel)
     {
-        Velocity = vel;
+        //TODO:
+        if (vel.y > 0.0f)
+        {
+            Velocity = vel;
+            Debug.Log("Real KK");
+        }
+        else
+        {
+            var speed = vel.magnitude;
+            var dir = Vector3.ProjectOnPlane(vel.normalized, Hit.normal);
+            Velocity = dir.normalized * speed;
+        }
     }
 
     void Start()
@@ -53,6 +59,9 @@ public class PlayerCharacterPhysics : MonoBehaviour
     bool CheckGround()
     {
         float maxDistance = collider.bounds.extents.y - radius + groundCheckOffset;
-        return Physics.SphereCast(origin, radius, Vector3.down, out var hit, maxDistance);
+        var result = Physics.SphereCast(origin, radius, Vector3.down, out var hit, maxDistance);
+        Hit = hit;
+
+        return result;
     }
 }

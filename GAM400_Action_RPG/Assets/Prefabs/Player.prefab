@@ -205,19 +205,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e04a07073d146c40a8305da18dd1c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modelTransform: {fileID: 8164268554031342251}
-  playerRigidbody: {fileID: 8961644054713335887}
-  heightCapsuleCollider: {fileID: 4010639558432836046}
-  camera: {fileID: 5972610462253720767}
-  character: {fileID: 5962901812370256302}
+  rigidbody: {fileID: 8961644054713335887}
+  collider: {fileID: 4010639558432836046}
+  data: {fileID: 11400000, guid: eac60296a7ba96548b22886795473b89, type: 2}
+  character: {fileID: 0}
   groundCheckOffset: 0.01
-  walkSpeed: 2.5
-  sprintSpeed: 5
-  jumpSpeed: 3
-  minGravity: -5
-  maxGravity: -20
-  gravityTimer: 0.1
-  gravityIncrement: -5
 --- !u!1 &4056423588569511583
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +321,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2349a9f44e873a45908529fc39554a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPhysics: {fileID: 9210275686552125780}
+  data: {fileID: 11400000, guid: eac60296a7ba96548b22886795473b89, type: 2}
+  physics: {fileID: 9210275686552125780}
+  camera: {fileID: 5972610462253720767}
 --- !u!1 &4300660395846860887
 GameObject:
   m_ObjectHideFlags: 0

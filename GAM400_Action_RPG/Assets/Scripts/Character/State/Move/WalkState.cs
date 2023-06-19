@@ -3,14 +3,14 @@ using UnityEngine;
 public class WalkState : MoveState
 {
     private CharacterData data;
-
-    //TODO Change to Other things
     private PlayerCharacterPhysics physics;
+    private PlayerCharacter character;
 
-    public WalkState(CharacterData data, PlayerCharacterPhysics physics)
+    public WalkState(CharacterData data, PlayerCharacterPhysics physics, PlayerCharacter character)
     {
         this.data = data;
         this.physics = physics;
+        this.character = character;
     }
 
     public override void Enter()
@@ -29,9 +29,9 @@ public class WalkState : MoveState
 
     public override void UpdateMove(Vector2 input, ref Vector3 velocity)
     {
-        var direction = physics.GetDirection();
-        var forward = direction.Forward;
-        var right = direction.Right;
+        var direction = character.Look;
+        var forward = direction.forward;
+        var right = direction.right;
 
         velocity = (forward * input.y + right * input.x) * data.WalkSpeed;
     }

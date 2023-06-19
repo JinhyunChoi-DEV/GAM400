@@ -4,15 +4,16 @@ public class CharacterMoveStateMachine
 {
     private MoveStateFactory factory;
     private PlayerCharacterPhysics physics;
+    private PlayerCharacter character;
 
     private InputState input;
     private MoveType current;
     private MoveType prev;
 
-    public CharacterMoveStateMachine(CharacterData data, PlayerCharacterPhysics physics)
+    public CharacterMoveStateMachine(CharacterData data, PlayerCharacterPhysics physics, PlayerCharacter character)
     {
         this.physics = physics;
-        factory = new MoveStateFactory(data, physics);
+        factory = new MoveStateFactory(data, physics, character);
 
         current = MoveType.Idle;
     }
@@ -39,10 +40,9 @@ public class CharacterMoveStateMachine
     public void FixedUpdate()
     {
         Vector3 velocity = physics.Velocity;
-
+        
         var currentState = factory.GetState(current);
         currentState.UpdateMove(input.Direction, ref velocity);
-
         physics.ApplyVelocity(velocity);
     }
 
@@ -58,10 +58,9 @@ public class CharacterMoveStateMachine
             current = MoveType.Landing;
 
         // check one frame more
-        else if ((input.Jump || prev == MoveType.Jump) && prev != MoveType.Landing)
+        else if (input.Jump || prev == MoveType.Jump)
             current = MoveType.Jump;
         
-
         else if (input.Direction.magnitude != 0 && input.Sprint)
             current = MoveType.Sprint;
 

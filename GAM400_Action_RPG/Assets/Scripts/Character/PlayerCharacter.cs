@@ -5,12 +5,15 @@ public class PlayerCharacter : MonoBehaviour
 {
     [SerializeField] private CharacterData data;
     [SerializeField] private PlayerCharacterPhysics physics;
+    [SerializeField] private CharacterCamera camera;
+
+    public CameraLookInfo Look => camera.GetLook();
 
     private CharacterMoveStateMachine moveStateMachine;
 
     void Start()
     {
-        moveStateMachine = new CharacterMoveStateMachine(data, physics);
+        moveStateMachine = new CharacterMoveStateMachine(data, physics, this);
     }
 
     void Update()
