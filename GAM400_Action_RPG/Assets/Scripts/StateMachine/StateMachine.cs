@@ -1,18 +1,31 @@
-
-public interface IState<T> where T : IState<T>
+namespace BattleZZang
 {
-    void Enter();
+    public abstract class StateMachine
+    {
+        protected IState current;
 
-    void Update();
+        public void Change(IState next)
+        {
+            current?.Exit();
 
-    void Exit();
-}
+            current = next;
 
-public interface IStateMachine
-{
-    void Initialize();
-    void Update();
-    void FixedUpdate();
-    void Clear();
+            current.Enter();
+        }
 
+        public void HandleInput()
+        {
+            current?.HandleInput();
+        }
+
+        public void Update()
+        {
+            current?.Update();
+        }
+
+        public void FixedUpdate()
+        {
+            current?.FixedUpdate();
+        }
+    }
 }
