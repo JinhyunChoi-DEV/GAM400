@@ -9,7 +9,6 @@ namespace BattleZZang
         private readonly CinemachineFramingTransposer framingTransposer;
         private readonly CinemachineInputProvider inputProvider;
         private readonly CameraZoomData data;
-        private readonly float epsilon = 0.0001f;
 
         private float newDistance;
 
@@ -28,7 +27,7 @@ namespace BattleZZang
             newDistance = Mathf.Clamp(newDistance + zoomValue, data.MinDistance, data.MaxDistance);
 
             float currentDistance = framingTransposer.m_CameraDistance;
-            if (Math.Abs(newDistance - currentDistance) < epsilon)
+            if (Math.Abs(newDistance - currentDistance) < MathVariables.epsilon)
                 return;
 
             float result = Mathf.Lerp(currentDistance, newDistance, data.Smoothing * Time.deltaTime);

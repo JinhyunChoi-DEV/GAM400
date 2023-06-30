@@ -9,6 +9,8 @@ namespace BattleZZang
     // Aim : POV
     public class PlayerCamera : MonoBehaviour
     {
+        public Transform CameraTransform { get; private set; }
+
         [SerializeField] private Transform cameraTarget;
         [SerializeField] private CinemachineVirtualCamera camera;
         [SerializeField] private CameraSettingData settingData;
@@ -24,6 +26,7 @@ namespace BattleZZang
 
             camera.LookAt = cameraTarget;
             camera.Follow = cameraTarget;
+            CameraTransform = Camera.main.transform;
         }
         
         void Start()
