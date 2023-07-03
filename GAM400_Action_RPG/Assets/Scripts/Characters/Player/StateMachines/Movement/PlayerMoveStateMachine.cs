@@ -3,7 +3,7 @@ namespace BattleZZang
     public class PlayerMoveStateMachine : StateMachine
     {
         public Player Player { get; }
-        public PlayerReusableData ReusableData { get; }
+        public PlayerMovementShareData MovementShareData { get; }
 
         public IdleState Idle { get; }
         public WalkState Walk { get; }
@@ -13,7 +13,7 @@ namespace BattleZZang
         public PlayerMoveStateMachine(Player player)
         {
             Player = player;
-            ReusableData = new PlayerReusableData();
+            MovementShareData = new PlayerMovementShareData();
 
             Idle = new IdleState(this);
             Walk = new WalkState(this);

@@ -29,7 +29,7 @@ namespace BattleZZang
 
         protected virtual void OnMove()
         {
-            if (reusableData.IsWalk)
+            if (movementShareData.IsWalk)
             {
                 stateMachine.Change(stateMachine.Walk);
                 return;

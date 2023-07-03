@@ -11,7 +11,7 @@ namespace BattleZZang
         protected PlayerInput input => stateMachine.Player.Input;
         protected PlayerPhysics physics => stateMachine.Player.Physics;
         protected PlayerCamera camera => stateMachine.Player.Camera;
-        protected PlayerReusableData reusableData => stateMachine.ReusableData;
+        protected PlayerMovementShareData movementShareData => stateMachine.MovementShareData;
 
         public PlayerMoveState(PlayerMoveStateMachine stateMachine)
         {
@@ -23,7 +23,7 @@ namespace BattleZZang
 
         private void Initialize()
         {
-            reusableData.TimeToReachTargetRotation = moveData.BaseRotationData.TargetRotationReachTime;
+            movementShareData.TimeToReachTargetRotation = moveData.BaseRotationData.TargetRotationReachTime;
         }
 
         public virtual void Enter()
@@ -66,17 +66,17 @@ namespace BattleZZang
 
         protected virtual void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
-            reusableData.IsWalk = !reusableData.IsWalk;
+            movementShareData.IsWalk = !movementShareData.IsWalk;
         }
 
         private void ReadMoveInput()
         {
-            reusableData.MovementInput = input.PlayerActions.Movement.ReadValue<Vector2>();
+            movementShareData.MovementInput = input.PlayerActions.Movement.ReadValue<Vector2>();
         }
 
         private void Move()
         {
-            if (reusableData.MovementInput == Vector2.zero || reusableData.MoveSpeedModifier == 0.0f)
+            if (movementShareData.MovementInput == Vector2.zero || movementShareData.MoveSpeedModifier == 0.0f)
                 return;
 
             Rotate(GetMoveInputDirection());
@@ -94,11 +94,11 @@ namespace BattleZZang
         {
             float currentAngle = physics.GetRotation().eulerAngles.y;
 
-            if (Math.Abs(currentAngle - reusableData.CurrentTargetRotation.y) < MathVariables.epsilon)
+            if (Math.Abs(currentAngle - movementShareData.CurrentTargetRotation.y) < MathVariables.epsilon)
                 return;
 
-            float adjustAngle = Mathf.SmoothDampAngle(currentAngle, reusableData.CurrentTargetRotation.y, ref reusableData.DampedTargetRotationCurrentVelocity.y, reusableData.TimeToReachTargetRotation.y - reusableData.DampedTargetRotationPassedTime.y);
-            reusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
+            float adjustAngle = Mathf.SmoothDampAngle(currentAngle, movementShareData.CurrentTargetRotation.y, ref movementShareData.DampedTargetRotationCurrentVelocity.y, movementShareData.TimeToReachTargetRotation.y - movementShareData.DampedTargetRotationPassedTime.y);
+            movementShareData.DampedTargetRotationPassedTime.y += Time.deltaTime;
 
             var targetRotation = Quaternion.Euler(0, adjustAngle, 0);
             physics.ApplyRotation(targetRotation);
@@ -107,17 +107,17 @@ namespace BattleZZang
         #region Utiles
         protected Vector3 GetMoveInputDirection()
         {
-            return new Vector3(reusableData.MovementInput.x, 0, reusableData.MovementInput.y);
+            return new Vector3(movementShareData.MovementInput.x, 0, movementShareData.MovementInput.y);
         }
 
         protected Vector3 GetMoveDirection()
         {
-            return Quaternion.Euler(0, reusableData.CurrentTargetRotation.y, 0) * Vector3.forward;
+            return Quaternion.Euler(0, movementShareData.CurrentTargetRotation.y, 0) * Vector3.forward;
         }
 
         protected float GetSpeed()
         {
-            return moveData.BaseSpeed * reusableData.MoveSpeedModifier;
+            return moveData.BaseSpeed * movementShareData.MoveSpeedModifier * physics.PhysicsShareData.SlopeSpeedModifiers;
         }
 
         protected void UpdateDirectAngle(Vector3 dir, bool useCameraRotation = true)
@@ -127,14 +127,14 @@ namespace BattleZZang
             if (useCameraRotation)
                 ApplyCameraRotation(ref directAngle);
 
-            if (Math.Abs(directAngle - reusableData.CurrentTargetRotation.y) > MathVariables.epsilon)
+            if (Math.Abs(directAngle - movementShareData.CurrentTargetRotation.y) > MathVariables.epsilon)
                 UpdateCurrentRotation(directAngle);
         }
 
         private void UpdateCurrentRotation(float directAngle)
         {
-            reusableData.CurrentTargetRotation.y = directAngle;
-            reusableData.DampedTargetRotationPassedTime.y = 0.0f;
+            movementShareData.CurrentTargetRotation.y = directAngle;
+            movementShareData.DampedTargetRotationPassedTime.y = 0.0f;
         }
 
         private float GetMoveAngle(Vector3 direction)

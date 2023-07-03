@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleZZang
 {
-    public class PlayerReusableData
+    public class PlayerMovementShareData
     {
         public Vector2 MovementInput { get; set; }
         public float MoveSpeedModifier { get; set; } = 1.0f;

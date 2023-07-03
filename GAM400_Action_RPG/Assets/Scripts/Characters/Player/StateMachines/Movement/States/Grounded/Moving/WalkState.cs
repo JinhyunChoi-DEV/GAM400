@@ -11,7 +11,7 @@ namespace BattleZZang
         {
             base.Enter();
 
-            reusableData.MoveSpeedModifier = moveData.WalkData.SpeedModifier;
+            movementShareData.MoveSpeedModifier = moveData.WalkData.SpeedModifier;
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)

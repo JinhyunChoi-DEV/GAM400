@@ -11,7 +11,7 @@ namespace BattleZZang
         {
             base.Enter();
 
-            reusableData.MoveSpeedModifier = 0.0f;
+            movementShareData.MoveSpeedModifier = 0.0f;
             physics.ResetVelocity();
         }
 
@@ -19,7 +19,7 @@ namespace BattleZZang
         {
             base.Update();
 
-            if (reusableData.MovementInput == Vector2.zero)
+            if (movementShareData.MovementInput == Vector2.zero)
                 return;
 
             OnMove();

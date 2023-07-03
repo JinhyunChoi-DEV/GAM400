@@ -12,7 +12,7 @@ namespace BattleZZang
         {
             base.Enter();
 
-            reusableData.MoveSpeedModifier = moveData.RunData.SpeedModifier;
+            movementShareData.MoveSpeedModifier = moveData.RunData.SpeedModifier;
         }
 
         protected override void AddInputActionCallback()
