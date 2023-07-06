@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VFX;
 
-public class VFXTestPlayer : MonoBehaviour
+public class AnimationPlay : MonoBehaviour
 {
     [SerializeField] private KeyCode key;
-    [SerializeField] private VisualEffect[] vfxGraph;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -19,12 +18,7 @@ public class VFXTestPlayer : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
-            for (int i = 0; i < vfxGraph.Length; ++i)
-            {
-                if (vfxGraph[i] != null)
-                    vfxGraph[i].Play();
-            }
+            animator.SetTrigger("Start");
         }
     }
-
 }
