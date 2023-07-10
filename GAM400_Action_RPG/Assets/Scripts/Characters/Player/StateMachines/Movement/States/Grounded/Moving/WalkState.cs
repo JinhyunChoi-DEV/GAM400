@@ -9,9 +9,18 @@ namespace BattleZZang
 
         public override void Enter()
         {
-            base.Enter();
-
             movementShareData.MoveSpeedModifier = moveData.WalkData.SpeedModifier;
+            movementShareData.BackwardsCameraRecenteringData = moveData.WalkData.BackwardsCameraRecenteringData;
+
+            base.Enter();
+            movementShareData.CurrentJumpForce = airborneData.JumpData.WeakForce;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            SetBaseCameraRecentering();
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
@@ -19,6 +28,13 @@ namespace BattleZZang
             base.OnWalkToggleStarted(context);
 
             stateMachine.Change(stateMachine.Run);
+        }
+
+        protected override void OnMoveCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.Change(stateMachine.LightStop);
+
+            base.OnMoveCanceled(context);
         }
     }
 }

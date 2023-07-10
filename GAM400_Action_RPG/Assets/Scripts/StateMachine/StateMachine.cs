@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BattleZZang
 {
     public abstract class StateMachine
@@ -26,6 +28,31 @@ namespace BattleZZang
         public void FixedUpdate()
         {
             current?.FixedUpdate();
+        }
+
+        public void OnAnimationEnter()
+        {
+            current?.OnAnimationEnter();
+        }
+
+        public void OnAnimationExit()
+        {
+            current?.OnAnimationExit();
+        }
+
+        public void OnAnimationTransition()
+        {
+            current?.OnAnimationTransition();
+        }
+
+        public void OnTriggerEnter(Collider collider)
+        {
+            current?.OnTriggerEnter(collider);
+        }
+
+        public void OnTriggerExit(Collider collider)
+        {
+            current?.OnTriggerExit(collider);
         }
     }
 }

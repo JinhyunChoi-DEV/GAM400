@@ -1,32 +1,52 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BattleZZang
 {
     public class RunState : PlayerMovingState
     {
+        private PlayerSprintData sprintData;
+
+        private float startTime;
+
         public RunState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
         {
+            sprintData = moveData.SprintData;
         }
 
         public override void Enter()
         {
+            movementShareData.MoveSpeedModifier = moveData.RunData.SpeedModifier;
+
             base.Enter();
 
-            movementShareData.MoveSpeedModifier = moveData.RunData.SpeedModifier;
+            movementShareData.CurrentJumpForce = airborneData.JumpData.MediumForce;
+
+            startTime = Time.time;
         }
 
-        protected override void AddInputActionCallback()
+        public override void Update()
         {
-            base.AddInputActionCallback();
+            base.Update();
 
-            stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+            if (!movementShareData.IsWalk)
+                return;
+
+            if (Time.time < startTime + sprintData.RunToWalkTime)
+                return;
+
+            StopRun();
         }
 
-        protected override void RemoveInputActionCallback()
+        private void StopRun()
         {
-            base.RemoveInputActionCallback();
+            if (movementShareData.MovementInput == Vector2.zero)
+            {
+                stateMachine.Change(stateMachine.Idle);
+                return;
+            }
 
-            stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+            stateMachine.Change(stateMachine.Walk);
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
@@ -34,6 +54,13 @@ namespace BattleZZang
             base.OnWalkToggleStarted(context);
 
             stateMachine.Change(stateMachine.Walk);
+        }
+
+        protected override void OnMoveCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.Change(stateMachine.MediumStop);
+
+            base.OnMoveCanceled(context);
         }
     }
 }

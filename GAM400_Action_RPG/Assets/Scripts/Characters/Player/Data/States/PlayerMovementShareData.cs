@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleZZang
@@ -6,7 +7,14 @@ namespace BattleZZang
     {
         public Vector2 MovementInput { get; set; }
         public float MoveSpeedModifier { get; set; } = 1.0f;
+        public float MoveDecelerationForce { get; set; } = 1.0f;
         public bool IsWalk { get; set; }
+        public bool IsSprint { get; set; }
+        public Vector3 CurrentJumpForce { get; set; }
+        public List<PlayerCameraRecenteringData> SidewaysCameraRecenteringData { get; set; }
+        public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
+
+
 
         private Vector3 currentTargetRotation;
         private Vector3 timeToReachTargetRotation;
@@ -45,5 +53,6 @@ namespace BattleZZang
             }
         }
 
+        public PlayerRotationData RotationData { get; set; }
     }
 }

@@ -5,14 +5,18 @@ namespace BattleZZang
     public class IdleState : PlayerGroundedState
     {
         public IdleState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
-        { }
+        {
+        }
 
         public override void Enter()
         {
-            base.Enter();
-
             movementShareData.MoveSpeedModifier = 0.0f;
-            physics.ResetVelocity();
+            movementShareData.BackwardsCameraRecenteringData = moveData.IdleData.BackwardsCameraRecenteringData;
+
+            base.Enter();
+            movementShareData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
+
+            ResetVelocity();
         }
 
         public override void Update()
@@ -23,6 +27,16 @@ namespace BattleZZang
                 return;
 
             OnMove();
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if (!IsMoveHorizontal())
+                return;
+
+            ResetVelocity();
         }
     }
 }

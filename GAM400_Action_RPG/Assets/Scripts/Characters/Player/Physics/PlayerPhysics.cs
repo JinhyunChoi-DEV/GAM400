@@ -1,99 +1,140 @@
+using System;
 using UnityEngine;
 
 namespace BattleZZang
 {
+    public struct GroundRayResult
+    {
+        public bool IsCasted;
+        public Vector3 Direction;
+        public RaycastHit Hit;
+        public float GroundAngle;
+    }
+
     [RequireComponent(typeof(CapsuleCollider), typeof(Rigidbody))]
     public class PlayerPhysics : MonoBehaviour
     {
         public PlayerPhysicsShareData PhysicsShareData { get; private set; }
 
-        [SerializeField] private Rigidbody rigidBody;
+        public Rigidbody RigidBody { get; private set; }
 
         [field: SerializeField] public PlayerSO Data { get; private set; }
 
         [field:Header("Collisions")]
-        [field: SerializeField] public PlayerCollider Collider { get; private set; }
+        [field: SerializeField] public PlayerCapsuleColliderUtility Collider { get; private set; }
+        [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
+        [SerializeField] private Player player;
 
         private PlayerGroundedData moveData => Data.GroundedData;
 
-        public Quaternion GetRotation()
+        public void UpdateFloating(ref bool needRecentering)
         {
-            return rigidBody.rotation;
-        }
+            var center = Collider.CapsuleColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            var result = GetRayResult(center ,Vector3.down, Collider.CapsuleColliderUtility.SlopeData.FloatDistance);
 
-        public void ApplyForce(Vector3 dir, float speed)
-        {
-            var newForce = dir * speed;
-            var horizontalSpeed = rigidBody.velocity;
-            horizontalSpeed.y = 0.0f;
-
-            rigidBody.AddForce(newForce - horizontalSpeed, ForceMode.VelocityChange);
-        }
-
-        public void ApplyRotation(Quaternion rotation)
-        {
-            rigidBody.MoveRotation(rotation);
-        }
-
-        public void ResetVelocity()
-        {
-            rigidBody.velocity = Vector3.zero;
-        }
-
-        private void Awake()
-        {
-            PhysicsShareData = new PlayerPhysicsShareData();
-
-            Collider.Initialize(gameObject);
-            Collider.CalculateCapsuleColliderDimension();
-        }
-
-        private void OnValidate()
-        {
-            Collider.Initialize(gameObject);
-            Collider.CalculateCapsuleColliderDimension();
-        }
-
-        private void FixedUpdate()
-        {
-            Vector3 colliderCenter = Collider.CapsuleColliderData.Collider.bounds.center;
-            var radius = Collider.CapsuleColliderData.Collider.radius / 2.0f - Collider.DefaultColliderData.RayOffset;
-            
-            if(Physics.SphereCast(colliderCenter, radius, Vector3.down, out var hit, Collider.SlopeData.FloatDistance))
+            if (result.IsCasted)
             {
-                float angle = Vector3.Angle(hit.normal, Vector3.up);
-                SpeedModiferByAngle(angle);
+                float angle = result.GroundAngle;
+                SpeedModiferByAngle(angle, ref needRecentering);
 
                 if (PhysicsShareData.SlopeSpeedModifiers == 0)
                     return;
-
-                AdjustSlopeSpeedByDirection(angle, hit);
+                
+                AdjustSlopeSpeedByDirection(angle);
 
                 // if you want to adjust the player object scale, then multiply local scale.y
-                float distanceFloatingPoint = Collider.CapsuleColliderData.ColliderCenterInLocalSpace.y - hit.distance;
+                float distanceFloatingPoint = Collider.CapsuleColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y - result.Hit.distance;
 
                 if (distanceFloatingPoint == 0.0f)
                     return;
 
-                float amountToLift = distanceFloatingPoint * Collider.SlopeData.StepReachForce - rigidBody.velocity.y;
+                float amountToLift = distanceFloatingPoint * Collider.CapsuleColliderUtility.SlopeData.StepReachForce - RigidBody.velocity.y;
                 Vector3 liftForce = new Vector3(0, amountToLift, 0);
-                rigidBody.AddForce(liftForce, ForceMode.VelocityChange);
+                RigidBody.AddForce(liftForce, ForceMode.VelocityChange);
             }
         }
 
-        private void SpeedModiferByAngle(float angle)
+        public bool IsGroundLayer(LayerMask layer)
         {
-            float slopeSpeedModifier = moveData.SlopeDecreaseSpeedByAngles.Evaluate(angle);
-            PhysicsShareData.SlopeSpeedModifiers = slopeSpeedModifier;
-            Debug.Log(slopeSpeedModifier);
+            return LayerData.IsGroundLayer(layer);
         }
 
-        private void AdjustSlopeSpeedByDirection(float angle, RaycastHit hit)
+        public bool IsGroundUnderneath()
         {
-            var moveDir = Vector3.ProjectOnPlane(rigidBody.velocity, hit.normal);
+            BoxCollider groundChecker = Collider.TriggerColliderData.GroundCheckCollider;
+            Vector3 groundColliderCenter = groundChecker.bounds.center;
 
+            Collider[] overlappedColliders = Physics.OverlapBox(groundColliderCenter, Collider.TriggerColliderData.GroundCheckColliderExtents, groundChecker.transform.rotation, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+
+            return overlappedColliders.Length > 0;
+        }
+
+        public GroundRayResult GetRayResult(Vector3 center, Vector3 dir, float maxDistance)
+        {
+            GroundRayResult result;
+            result.IsCasted = false;
+            result.Direction = dir;
+            result.GroundAngle = 0.0f;
+
+            var ray = new Ray(center, dir);
+            result.IsCasted = Physics.Raycast(ray, out result.Hit, maxDistance, LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+
+            if (!result.IsCasted)
+                return result;
+
+            result.GroundAngle = Vector3.Angle(result.Hit.normal, -dir);
+            return result;
+        }
+
+        public bool IsMovingUp(float minVelocity = 0.1f)
+        {
+            return RigidBody.velocity.y > minVelocity;
+        }
+
+        public bool IsMovingDown(float minVelocity = 0.1f)
+        {
+            return RigidBody.velocity.y < -minVelocity;
+        }
+
+        private void Awake()
+        {
+            RigidBody = GetComponent<Rigidbody>();
+            PhysicsShareData = new PlayerPhysicsShareData();
+
+            Collider.CapsuleColliderUtility.Initialize(gameObject);
+            Collider.CapsuleColliderUtility.CalculateCapsuleColliderDimension();
+        }
+
+        private void OnTriggerEnter(Collider collider)
+        {
+            player.MoveStateMachine.OnTriggerEnter(collider);
+        }
+
+        private void OnTriggerExit(Collider collider)
+        {
+            player.MoveStateMachine.OnTriggerExit(collider);
+        }
+
+        private void OnValidate()
+        {
+            Collider.CapsuleColliderUtility.Initialize(gameObject);
+            Collider.CapsuleColliderUtility.CalculateCapsuleColliderDimension();
+        }
+
+        private void SpeedModiferByAngle(float angle, ref bool needRecentering)
+        {
+            float slopeSpeedModifier = moveData.SlopeDecreaseSpeedByAngles.Evaluate(angle);
+            if (Math.Abs(PhysicsShareData.SlopeSpeedModifiers - slopeSpeedModifier) > MathVariables.epsilon)
+            {
+                PhysicsShareData.SlopeSpeedModifiers = slopeSpeedModifier;
+                needRecentering = true;
+            }
+        }
+
+        private void AdjustSlopeSpeedByDirection(float angle)
+        {
             // Since we are going uphill, use it as it is
-            if (moveDir.y > 1.0f)
+            if (IsMovingUp())
                 return;
 
             PhysicsShareData.SlopeSpeedModifiers = 1.0f + moveData.SlopeIncreaseSpeedByAngles.Evaluate(angle);

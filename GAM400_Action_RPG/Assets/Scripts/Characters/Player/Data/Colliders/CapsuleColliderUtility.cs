@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BattleZZang
 {
     [Serializable]
-    public class PlayerCollider
+    public class CapsuleColliderUtility
     {
         public CapsuleColliderData CapsuleColliderData { get; private set; }
         [field: SerializeField] public DefaultColliderData DefaultColliderData { get; private set; }

@@ -6,36 +6,38 @@ namespace BattleZZang
     public class Player : MonoBehaviour
     {
         [field: SerializeField] public PlayerSO Data { get; private set; }
+        [field: SerializeField] public PlayerCameraUtility CameraUtility { get; private set; }
         public PlayerInput Input { get; private set; }
         public PlayerPhysics Physics { get; private set; }
         public PlayerCamera Camera { get; private set; }
 
-        private PlayerMoveStateMachine moveStateMachine;
-
+        public PlayerMoveStateMachine MoveStateMachine { get; private set; }
+        
         void Awake()
         {
             Input = GetComponent<PlayerInput>();
             Physics = GetComponent<PlayerPhysics>();
             Camera = GetComponent<PlayerCamera>();
 
-            moveStateMachine = new PlayerMoveStateMachine(this);
+            CameraUtility.Initialize();
+            MoveStateMachine = new PlayerMoveStateMachine(this);
         }
 
         void Start()
         {
-            moveStateMachine.Change(moveStateMachine.Idle);
+            MoveStateMachine.Change(MoveStateMachine.Idle);
         }
 
         void Update()
         {
-            moveStateMachine.HandleInput();
+            MoveStateMachine.HandleInput();
 
-            moveStateMachine.Update();
+            MoveStateMachine.Update();
         }
 
         void FixedUpdate()
         {
-            moveStateMachine.FixedUpdate();
+            MoveStateMachine.FixedUpdate();
         }
     }
 }
