@@ -11,6 +11,8 @@ namespace PathCreation.Examples
         public float speed = 5;
         float distanceTravelled;
 
+        private bool moving = false;
+        [SerializeField] private KeyCode key;
         void Start() {
             if (pathCreator != null)
             {
@@ -21,7 +23,12 @@ namespace PathCreation.Examples
 
         void Update()
         {
-            if (pathCreator != null)
+            if (Input.GetKeyDown(key))
+            {
+                moving = !moving;
+            }
+            
+            if (moving && pathCreator != null)
             {
                 distanceTravelled += speed * Time.deltaTime;
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
