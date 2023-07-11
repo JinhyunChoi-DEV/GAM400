@@ -21,6 +21,7 @@ namespace BattleZZang
             movementShareData.MoveSpeedModifier = sprintData.SpeedModifier;
 
             base.Enter();
+            StartAnimation(animationData.SprintParameterHash);
 
             movementShareData.CurrentJumpForce = airborneData.JumpData.StrongForce;
             needToReset = true;
@@ -30,6 +31,7 @@ namespace BattleZZang
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(animationData.SprintParameterHash);
 
             if (needToReset)
             {

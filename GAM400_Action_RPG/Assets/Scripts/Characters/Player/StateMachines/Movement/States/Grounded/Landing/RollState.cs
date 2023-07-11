@@ -17,8 +17,15 @@ namespace BattleZZang
             movementShareData.MoveSpeedModifier = rollData.SpeedModifer;
 
             base.Enter();
+            StartAnimation(animationData.RollParameterHash);
 
             movementShareData.IsSprint = false;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(animationData.RollParameterHash);
         }
 
         public override void FixedUpdate()

@@ -15,6 +15,8 @@ namespace BattleZZang
         protected PlayerPhysics physics => stateMachine.Player.Physics;
         protected PlayerCamera camera => stateMachine.Player.Camera;
         protected PlayerMovementShareData movementShareData => stateMachine.MovementShareData;
+        protected Animator animator => stateMachine.Player.Animator;
+        protected PlayerAnimationData animationData => stateMachine.Player.AnimationData;
 
         public PlayerMoveState(PlayerMoveStateMachine stateMachine)
         {
@@ -259,6 +261,16 @@ namespace BattleZZang
         protected virtual void OnMoveCanceled(InputAction.CallbackContext context)
         {
             DisableCameraRecentering();
+        }
+
+        protected void StartAnimation(int hash)
+        {
+            animator.SetBool(hash, true);
+        }
+
+        protected void StopAnimation(int hash)
+        {
+            animator.SetBool(hash, false);
         }
 
         private void UpdateCurrentRotation(float directAngle)

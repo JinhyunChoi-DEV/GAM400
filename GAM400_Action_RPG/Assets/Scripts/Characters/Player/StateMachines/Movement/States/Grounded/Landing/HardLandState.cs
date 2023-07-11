@@ -13,6 +13,7 @@ namespace BattleZZang
             movementShareData.MoveSpeedModifier = 0.0f;
 
             base.Enter();
+            StartAnimation(animationData.HardLandParameterHash);
 
             input.PlayerActions.Movement.Disable();
 
@@ -22,6 +23,7 @@ namespace BattleZZang
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(animationData.HardLandParameterHash);
 
             input.PlayerActions.Movement.Enable();
         }

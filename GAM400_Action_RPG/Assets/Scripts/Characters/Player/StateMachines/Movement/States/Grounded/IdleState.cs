@@ -14,9 +14,18 @@ namespace BattleZZang
             movementShareData.BackwardsCameraRecenteringData = moveData.IdleData.BackwardsCameraRecenteringData;
 
             base.Enter();
+            StartAnimation(animationData.IdleParameterHash);
+
             movementShareData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
 
             ResetVelocity();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(animationData.IdleParameterHash);
         }
 
         public override void Update()
