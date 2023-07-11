@@ -5,6 +5,8 @@ using UnityEngine.VFX;
 
 public class DissolveController : MonoBehaviour
 {
+    [SerializeField] private KeyCode trigger;
+    
     [Header("Modifiable Values")] 
     [SerializeField] private float dissolveRate = 0.0125f;   // rate of dissolve
     [SerializeField] private float refreshRate = 0.025f;    // rate of time which the dissolve visually updates
@@ -13,7 +15,6 @@ public class DissolveController : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer skinnedMesh;
     [SerializeField] private VisualEffect[] vfxGraph;
     
-
     private Material material;
     
     void Start()
@@ -26,7 +27,7 @@ public class DissolveController : MonoBehaviour
     void Update()
     {
         // on dissolve event
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(trigger))
         {
             StartCoroutine(DissolveRoutine());
         }
