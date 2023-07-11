@@ -13,6 +13,8 @@ namespace BattleZZang
             movementShareData.BackwardsCameraRecenteringData = moveData.WalkData.BackwardsCameraRecenteringData;
 
             base.Enter();
+            StartAnimation(animationData.WalkParameterHash);
+
             movementShareData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
 
@@ -20,6 +22,7 @@ namespace BattleZZang
         {
             base.Exit();
 
+            StopAnimation(animationData.WalkParameterHash);
             SetBaseCameraRecentering();
         }
 

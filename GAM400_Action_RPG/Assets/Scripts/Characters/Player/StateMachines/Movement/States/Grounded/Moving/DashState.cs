@@ -21,6 +21,7 @@ namespace BattleZZang
             movementShareData.MoveSpeedModifier = dashData.SpeedModifer;
 
             base.Enter();
+            StartAnimation(animationData.DashParameterHash);
 
             movementShareData.RotationData = dashData.RotationData;
             movementShareData.CurrentJumpForce = airborneData.JumpData.StrongForce;
@@ -37,6 +38,7 @@ namespace BattleZZang
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(animationData.DashParameterHash);
 
             SetBaseRotationData();
         }

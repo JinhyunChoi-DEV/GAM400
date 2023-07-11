@@ -7,6 +7,9 @@ namespace BattleZZang
     {
         [field: SerializeField] public PlayerSO Data { get; private set; }
         [field: SerializeField] public PlayerCameraUtility CameraUtility { get; private set; }
+        [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
+
+        public Animator Animator { get; private set; }
         public PlayerInput Input { get; private set; }
         public PlayerPhysics Physics { get; private set; }
         public PlayerCamera Camera { get; private set; }
@@ -18,8 +21,10 @@ namespace BattleZZang
             Input = GetComponent<PlayerInput>();
             Physics = GetComponent<PlayerPhysics>();
             Camera = GetComponent<PlayerCamera>();
+            Animator = GetComponentInChildren<Animator>();
 
             CameraUtility.Initialize();
+            AnimationData.Initialize();
             MoveStateMachine = new PlayerMoveStateMachine(this);
         }
 
@@ -38,6 +43,21 @@ namespace BattleZZang
         void FixedUpdate()
         {
             MoveStateMachine.FixedUpdate();
+        }
+
+        public void OnMoveStateAnimationEventEnter()
+        {
+            MoveStateMachine.OnAnimationEnter();
+        }
+
+        public void OnMoveStateAnimationEventExit()
+        {
+            MoveStateMachine.OnAnimationExit();
+        }
+
+        public void OnMoveStateAnimationTransitionEvent()
+        {
+            MoveStateMachine.OnAnimationTransition();
         }
     }
 }

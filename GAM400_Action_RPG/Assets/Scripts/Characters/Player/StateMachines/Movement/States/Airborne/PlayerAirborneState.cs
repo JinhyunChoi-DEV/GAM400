@@ -10,8 +10,15 @@ namespace BattleZZang
         public override void Enter()
         {
             base.Enter();
+            StartAnimation(animationData.AirborneParameterHash);
 
             ResetSprintState();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(animationData.AirborneParameterHash);
         }
 
         protected override void OnContactWithGround(Collider collider)

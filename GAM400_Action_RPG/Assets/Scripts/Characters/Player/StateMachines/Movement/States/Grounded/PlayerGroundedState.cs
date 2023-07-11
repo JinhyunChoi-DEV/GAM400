@@ -12,9 +12,18 @@ namespace BattleZZang
         {
             base.Enter();
 
+            StartAnimation(animationData.GroundedParameterHash);
+
             UpdateIsSprintState();
 
             UpdateCameraRecentering(movementShareData.MovementInput);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(animationData.GroundedParameterHash);
         }
 
         private void UpdateIsSprintState()

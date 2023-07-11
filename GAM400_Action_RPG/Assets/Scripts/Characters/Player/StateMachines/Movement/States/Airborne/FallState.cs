@@ -15,6 +15,7 @@ namespace BattleZZang
         public override void Enter()
         {
             base.Enter();
+            StartAnimation(animationData.FallParameterHash);
 
             enterPosition = stateMachine.Player.transform.position;
 
@@ -28,6 +29,7 @@ namespace BattleZZang
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            StopAnimation(animationData.FallParameterHash);
 
             LimitVerticalVelocity();
         }

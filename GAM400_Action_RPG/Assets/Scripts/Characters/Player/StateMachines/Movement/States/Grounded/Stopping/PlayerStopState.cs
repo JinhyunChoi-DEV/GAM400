@@ -13,6 +13,15 @@ namespace BattleZZang
             SetBaseCameraRecentering();
 
             base.Enter();
+
+            StartAnimation(animationData.StopParameterHash);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(animationData.StopParameterHash);
         }
 
         public override void FixedUpdate()
