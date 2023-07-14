@@ -1,31 +1,29 @@
+using System;
 using UnityEngine;
 
 namespace BattleZZang
 {
-    public class PlayerFeetGrounder : MonoBehaviour
+    public class PlayerFeetGrounder
     {
-        [Header("Feet Grounder")]
-        public bool EnableFeetIK = true;
-        [SerializeField] Animator animator;
-        [SerializeField] [Range(0f, 2f)] private float heightFormGroundRaycast = 1.14f;
-        [SerializeField] [Range(0f, 2f)] private float raycastDistance = 1.5f;
-        [SerializeField] private LayerMask environmentLayer;    // TODO: 플레이어 데이터껄로 가져오기
-        [SerializeField] private float pelvisOffset = 0f;
-        [SerializeField] [Range(0f, 1f)] private float pelvisUpAndDownSpeed = 0.28f;
-        [SerializeField] [Range(0f, 1f)] private float feetToIKPositionSpeed = 0.5f;
+        private PlayerLayerData layerData;
+        private Animator animator;
+        private Transform transform;
+        private PlayerFeetIKData ikData;
 
-        public string LeftFootAnimVariableName = "LeftFootCurve";
-        public string RightFootAnimVariableName = "RightFootCurve";
-
-        public bool UseProIKFeature = false;
-        public bool ShowDebug = true;
-
-        private bool isActive => EnableFeetIK && (animator != null);
+        private bool isActive => ikData.EnableFeetIK && (animator != null);
         private Vector3 rightFootPosition, leftFootPosition, rightFootIKPosition, leftFootIKPosition;
         private Quaternion leftFootIKRotation, rightFootIKRotation;
         private float lastPelvisPositionY, lastRightFootPositionY, lastLeftFootPositionY;
 
-        private void FixedUpdate()
+        public PlayerFeetGrounder(Player player)
+        {
+            animator = player.Animator;
+            layerData = player.Physics.LayerData;
+            transform = player.transform;
+            ikData = player.Physics.FeetIKData;
+        }
+
+        public void UpdateFeetPosition()
         {
             if (isActive == false)
                 return;
@@ -34,11 +32,13 @@ namespace BattleZZang
             AdjustFeetTarget(ref leftFootPosition, HumanBodyBones.LeftFoot);
 
             //find and raycast to the ground to find position
-            FeetPositionHandle(rightFootPosition, ref rightFootIKPosition, ref rightFootIKRotation);
-            FeetPositionHandle(leftFootPosition, ref leftFootIKPosition, ref leftFootIKRotation);
+            var rightFootTransform = animator.GetBoneTransform(HumanBodyBones.RightFoot).transform;
+            var leftFootTransform = animator.GetBoneTransform(HumanBodyBones.LeftFoot).transform;
+            FeetPositionHandle(rightFootPosition, ref rightFootIKPosition, ref rightFootIKRotation, rightFootTransform);
+            FeetPositionHandle(leftFootPosition, ref leftFootIKPosition, ref leftFootIKRotation, leftFootTransform);
         }
 
-        private void OnAnimatorIK(int layerIndex)
+        public void OnAnimatorIK(int layerIndex)
         {
             if (isActive == false)
                 return;
@@ -47,10 +47,10 @@ namespace BattleZZang
             animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1);
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
 
-            if (UseProIKFeature)
+            if (ikData.UseProIKFeature)
             {
-                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, animator.GetFloat(RightFootAnimVariableName));
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(LeftFootAnimVariableName));
+                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, animator.GetFloat(ikData .RightFootAnimVariableName));
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, animator.GetFloat(ikData.LeftFootAnimVariableName));
             }
 
             MoveFeetToIKPoint(AvatarIKGoal.RightFoot, rightFootIKPosition, rightFootIKRotation, ref lastRightFootPositionY);
@@ -66,7 +66,7 @@ namespace BattleZZang
                 targetIKPosition = transform.InverseTransformPoint(targetIKPosition);
                 positionIKHolder = transform.InverseTransformPoint(positionIKHolder);
 
-                float newYPosition = Mathf.Lerp(lastFootPositionY, positionIKHolder.y, feetToIKPositionSpeed);
+                float newYPosition = Mathf.Lerp(lastFootPositionY, positionIKHolder.y, ikData.FeetToIKPositionSpeed);
                 targetIKPosition.y += newYPosition;
                 lastFootPositionY = newYPosition;
                 targetIKPosition = transform.TransformPoint(targetIKPosition);
@@ -91,23 +91,26 @@ namespace BattleZZang
 
             Vector3 newPelvisPosition = animator.bodyPosition + Vector3.up * totalOffset;
 
-            newPelvisPosition.y = Mathf.Lerp(lastPelvisPositionY, newPelvisPosition.y, pelvisUpAndDownSpeed);
+            newPelvisPosition.y = Mathf.Lerp(lastPelvisPositionY, newPelvisPosition.y, ikData.PelvisUpAndDownSpeed);
             animator.bodyPosition = newPelvisPosition;
             lastPelvisPositionY = animator.bodyPosition.y;
         }
 
-        private void FeetPositionHandle(Vector3 fromSkyPosition, ref Vector3 feetIKPosition, ref Quaternion feetIKRotation)
+        private void FeetPositionHandle(Vector3 fromSkyPosition, ref Vector3 feetIKPosition, ref Quaternion feetIKRotation, Transform footTransform)
         {
             RaycastHit feetHit;
 
-            if (ShowDebug)
-                Debug.DrawLine(fromSkyPosition, fromSkyPosition + Vector3.down * (raycastDistance + heightFormGroundRaycast), Color.red);
+            if (ikData.ShowDebug)
+                Debug.DrawLine(fromSkyPosition, fromSkyPosition + Vector3.down * (ikData.RaycastDistance + ikData.HeightFormGroundRaycast), Color.red);
 
-            if (Physics.Raycast(fromSkyPosition, Vector3.down, out feetHit, raycastDistance + heightFormGroundRaycast, environmentLayer))
+            if (Physics.Raycast(fromSkyPosition, Vector3.down, out feetHit, ikData.RaycastDistance + ikData.HeightFormGroundRaycast, layerData.GroundLayer))
             {
                 feetIKPosition = fromSkyPosition;
-                feetIKPosition.y = feetHit.point.y + pelvisOffset;
-                feetIKRotation = Quaternion.FromToRotation(Vector3.up, feetHit.normal) * transform.rotation;
+                feetIKPosition.y = feetHit.point.y + ikData.PelvisOffset;
+                
+                Quaternion rp = Quaternion.LookRotation(footTransform.parent.forward, footTransform.parent.up);
+                Vector3 footRot = new Vector3(0.0f, Quaternion.Inverse(rp).eulerAngles.y, 0.0f);
+                feetIKRotation = Quaternion.FromToRotation(Vector3.up, feetHit.normal) * Quaternion.Euler(footRot);
 
                 return;
             }
@@ -118,7 +121,7 @@ namespace BattleZZang
         private void AdjustFeetTarget(ref Vector3 feetPosition, HumanBodyBones foot)
         {
             feetPosition = animator.GetBoneTransform(foot).position;
-            feetPosition.y = transform.position.y + heightFormGroundRaycast;
+            feetPosition.y = transform.position.y + ikData.HeightFormGroundRaycast;
         }
     }
 }

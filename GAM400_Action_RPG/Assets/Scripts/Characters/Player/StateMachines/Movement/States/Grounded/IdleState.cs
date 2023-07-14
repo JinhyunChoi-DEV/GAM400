@@ -80,14 +80,11 @@ namespace BattleZZang
         public override void OnAnimationEnter()
         {
             doingRotation = true;
-            Debug.Log("HI");
         }
 
         public override void OnAnimationExit()
         {
             doingRotation = false;
-
-            Debug.Log("BYE");
         }
     }
 }

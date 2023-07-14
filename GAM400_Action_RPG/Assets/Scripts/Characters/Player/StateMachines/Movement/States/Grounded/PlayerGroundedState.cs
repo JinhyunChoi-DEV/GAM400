@@ -5,8 +5,12 @@ namespace BattleZZang
 {
     public class PlayerGroundedState : PlayerMoveState
     {
+        private PlayerFeetGrounder feetIK;
+
         public PlayerGroundedState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
-        { }
+        {
+            feetIK = new PlayerFeetGrounder(stateMachine.Player);
+        }
 
         public override void Enter()
         {
@@ -41,11 +45,18 @@ namespace BattleZZang
         {
             base.FixedUpdate();
 
+            feetIK.UpdateFeetPosition();
+
             bool needRecentering = false;
             physics.UpdateFloating(ref needRecentering);
 
             if (needRecentering)
                 UpdateCameraRecentering(movementShareData.MovementInput);
+        }
+
+        public override void OnAnimatorIK(int layerIndex)
+        {
+            feetIK.OnAnimatorIK(layerIndex);
         }
 
         protected override void AddInputActionCallback()
