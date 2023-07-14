@@ -14,5 +14,7 @@ namespace BattleZZang
         public void OnAnimationTransition();
         public void OnTriggerEnter(Collider collider);
         public void OnTriggerExit(Collider collider);
+
+        public void OnAnimatorIK(int layerIndex);
     }
 }

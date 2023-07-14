@@ -4,8 +4,16 @@ namespace BattleZZang
 {
     public class IdleState : PlayerGroundedState
     {
+        private PlayerLookAt lookAt;
+        private int rotateHash;
+        private int directionHash;
+
         public IdleState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
         {
+            lookAt = stateMachine.Player.LookAt;
+
+            rotateHash = Animator.StringToHash("IsTurning");
+            directionHash = Animator.StringToHash("TurningDirection");
         }
 
         public override void Enter()
@@ -32,6 +40,11 @@ namespace BattleZZang
         {
             base.Update();
 
+            bool isRotation = Mathf.Abs(movementShareData.RotationAngle) >= 90.0f;
+            Debug.Log(isRotation);
+            animator.SetBool(rotateHash, isRotation);
+            animator.SetInteger(directionHash, movementShareData.RotationDirection);
+
             if (movementShareData.MovementInput == Vector2.zero)
                 return;
 
@@ -46,6 +59,14 @@ namespace BattleZZang
                 return;
 
             ResetVelocity();
+        }
+
+        public override void OnAnimatorIK(int layerIndex)
+        {
+            base.OnAnimatorIK(layerIndex);
+
+            animator.SetLookAtWeight(1);
+            animator.SetLookAtPosition(lookAt.LookAtTransform.position);
         }
     }
 }

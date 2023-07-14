@@ -55,11 +55,13 @@ namespace BattleZZang
 
         public virtual void Update()
         {
+            UpdateTargetDirection(GetMoveInputDirection());
         }
 
         public virtual void FixedUpdate()
         {
-            Move();
+            int a = 5;
+            //Move();
         }
 
         public virtual void OnAnimationEnter()
@@ -69,6 +71,9 @@ namespace BattleZZang
         { }
 
         public virtual void OnAnimationTransition()
+        { }
+
+        public virtual void OnAnimatorIK(int layerIndex)
         { }
 
         public virtual void OnTriggerEnter(Collider collider)
@@ -88,6 +93,7 @@ namespace BattleZZang
                 return;
             }
         }
+
 
         protected virtual void AddInputActionCallback()
         {
@@ -330,6 +336,40 @@ namespace BattleZZang
         private void OnMovePerformed(InputAction.CallbackContext context)
         {
             UpdateCameraRecentering(context.ReadValue<Vector2>());
+        }
+
+        private void UpdateTargetDirection(Vector3 dir)
+        {
+            Vector3 cameraRotation = new Vector3(WrapAngle(camera.CameraTransform.eulerAngles.x), 
+                WrapAngle(camera.CameraTransform.eulerAngles.y), 
+                WrapAngle(camera.CameraTransform.eulerAngles.z));
+
+            Vector3 playerRotation = new Vector3(WrapAngle(stateMachine.Player.transform.eulerAngles.x),
+                WrapAngle(stateMachine.Player.transform.eulerAngles.y),
+                WrapAngle(stateMachine.Player.transform.eulerAngles.z));
+
+            Vector3 diffPlayerToCamera = cameraRotation - playerRotation;
+            movementShareData.RotationAngle = WrapAngle(diffPlayerToCamera.y);
+
+            if (movementShareData.RotationAngle > 0)
+                movementShareData.RotationDirection = 1;
+            else if(movementShareData.RotationAngle < 0)
+                movementShareData.RotationDirection = -1;
+            else if(movementShareData.RotationAngle == 0)
+                movementShareData.RotationDirection = 0;
+        }
+
+        private float WrapAngle(float angle)
+        {
+            angle %= 360.0f;
+
+            if (angle > 180.0f)
+                return angle - 360.0f;
+
+            if (angle < -180.0f)
+                return angle + 360.0f;
+
+            return angle;
         }
     }
 }

@@ -6,12 +6,7 @@ namespace BattleZZang
 {
     public class PlayerAnimationEventTrigger : MonoBehaviour
     {
-        private Player player;
-
-        private void Awake()
-        {
-            player = transform.parent.GetComponent<Player>();
-        }
+        [SerializeField]private Player player;
 
         public void TriggerOnMoveStateAnimationEnterEvent()
         {

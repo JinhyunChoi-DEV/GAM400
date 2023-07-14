@@ -10,11 +10,12 @@ namespace BattleZZang
         public float MoveDecelerationForce { get; set; } = 1.0f;
         public bool IsWalk { get; set; }
         public bool IsSprint { get; set; }
+        public float RotationAngle { get; set; }
+        public int RotationDirection { get; set; } //-1: left, 1: right, base: 0
+
         public Vector3 CurrentJumpForce { get; set; }
         public List<PlayerCameraRecenteringData> SidewaysCameraRecenteringData { get; set; }
         public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
-
-
 
         private Vector3 currentTargetRotation;
         private Vector3 timeToReachTargetRotation;
