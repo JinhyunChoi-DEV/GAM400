@@ -23,8 +23,12 @@ namespace BattleZZang
         public void Update()
         {
             debugObject.gameObject.SetActive(ShowDebug);
-            
-            float radian = Mathf.Deg2Rad * data.RotationAngle;
+
+            float targetAngle = data.RotationAngle;
+            if (Mathf.Abs(data.RotationAngle) > 90)
+                targetAngle = (Math.Sign(targetAngle) == 1) ? 90.0f : -90.0f;
+
+            float radian = Mathf.Deg2Rad * targetAngle;
             float x = Radius * Mathf.Sin(radian);
             float y = LookAtTransform.localPosition.y;
             float z = Radius * Mathf.Cos(radian);

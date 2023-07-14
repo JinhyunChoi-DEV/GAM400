@@ -41,11 +41,11 @@ namespace BattleZZang
         {
             base.FixedUpdate();
 
-            //bool needRecentering = false;
-            //physics.UpdateFloating(ref needRecentering);
+            bool needRecentering = false;
+            physics.UpdateFloating(ref needRecentering);
 
-            //if(needRecentering)
-            //    UpdateCameraRecentering(movementShareData.MovementInput);
+            if (needRecentering)
+                UpdateCameraRecentering(movementShareData.MovementInput);
         }
 
         protected override void AddInputActionCallback()

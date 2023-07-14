@@ -7,6 +7,9 @@ namespace BattleZZang
         private PlayerLookAt lookAt;
         private int rotateHash;
         private int directionHash;
+        private int doingRotationHash;
+
+        private bool doingRotation;
 
         public IdleState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
         {
@@ -14,12 +17,14 @@ namespace BattleZZang
 
             rotateHash = Animator.StringToHash("IsTurning");
             directionHash = Animator.StringToHash("TurningDirection");
+            doingRotationHash = Animator.StringToHash("DoingRotation");
         }
 
         public override void Enter()
         {
             movementShareData.MoveSpeedModifier = 0.0f;
             movementShareData.BackwardsCameraRecenteringData = moveData.IdleData.BackwardsCameraRecenteringData;
+            doingRotation = false;
 
             base.Enter();
             StartAnimation(animationData.IdleParameterHash);
@@ -33,6 +38,7 @@ namespace BattleZZang
         {
             base.Exit();
 
+            doingRotation = false;
             StopAnimation(animationData.IdleParameterHash);
         }
 
@@ -40,11 +46,13 @@ namespace BattleZZang
         {
             base.Update();
 
-            bool isRotation = Mathf.Abs(movementShareData.RotationAngle) >= 90.0f;
-            Debug.Log(isRotation);
-            animator.SetBool(rotateHash, isRotation);
+
+            animator.SetBool(doingRotationHash, doingRotation);
             animator.SetInteger(directionHash, movementShareData.RotationDirection);
 
+            bool isRotation = Mathf.Abs(movementShareData.RotationAngle) >= 90.0f;
+            animator.SetBool(rotateHash, isRotation);
+            
             if (movementShareData.MovementInput == Vector2.zero)
                 return;
 
@@ -67,6 +75,19 @@ namespace BattleZZang
 
             animator.SetLookAtWeight(1);
             animator.SetLookAtPosition(lookAt.LookAtTransform.position);
+        }
+
+        public override void OnAnimationEnter()
+        {
+            doingRotation = true;
+            Debug.Log("HI");
+        }
+
+        public override void OnAnimationExit()
+        {
+            doingRotation = false;
+
+            Debug.Log("BYE");
         }
     }
 }

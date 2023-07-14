@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleZZang
@@ -29,6 +27,21 @@ namespace BattleZZang
             if (IsInAnimationTransition())
                 return;
 
+            player.OnMoveStateAnimationTransitionEvent();
+        }
+
+        public void TriggerOnMoveStateAnimationEnterEventDirect()
+        {
+            player.OnMoveStateAnimationEventEnter();
+        }
+
+        public void TriggerOnMoveStateAnimationExitDirect()
+        {
+            player.OnMoveStateAnimationEventExit();
+        }
+
+        public void TriggerOnMoveStateAnimationTransitionEventDirect()
+        {
             player.OnMoveStateAnimationTransitionEvent();
         }
 
