@@ -23,8 +23,10 @@ namespace BattleZZang
         [field:Header("Collisions")]
         [field: SerializeField] public PlayerCapsuleColliderUtility Collider { get; private set; }
         [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
+
         [SerializeField] private Player player;
 
+        public bool IsGround { get; private set; }
         private PlayerGroundedData moveData => Data.GroundedData;
 
         public void UpdateFloating(ref bool needRecentering)
@@ -103,6 +105,14 @@ namespace BattleZZang
 
             Collider.CapsuleColliderUtility.Initialize(gameObject);
             Collider.CapsuleColliderUtility.CalculateCapsuleColliderDimension();
+        }
+
+        private void FixedUpdate()
+        {
+            var center = Collider.CapsuleColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            var result = GetRayResult(center, Vector3.down, Collider.CapsuleColliderUtility.SlopeData.FloatDistance);
+
+            IsGround = result.IsCasted;
         }
 
         private void OnTriggerEnter(Collider collider)

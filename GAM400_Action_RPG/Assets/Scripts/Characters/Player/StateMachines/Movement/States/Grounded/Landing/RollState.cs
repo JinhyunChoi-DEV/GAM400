@@ -49,6 +49,10 @@ namespace BattleZZang
             OnMove();
         }
 
+        public override void OnAnimatorIK(int layerIndex)
+        {
+        }
+
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         { }
     }

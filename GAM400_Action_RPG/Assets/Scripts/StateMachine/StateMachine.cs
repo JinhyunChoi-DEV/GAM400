@@ -54,5 +54,10 @@ namespace BattleZZang
         {
             current?.OnTriggerExit(collider);
         }
+
+        public void OnAnimatorIK(int layerIndex)
+        {
+            current?.OnAnimatorIK(layerIndex);
+        }
     }
 }

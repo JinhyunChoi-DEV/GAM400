@@ -21,20 +21,36 @@ namespace BattleZZang
 
             movementShareData.MoveSpeedModifier = 0.0f;
 
+            animator.applyRootMotion = false;
             var currentVelocity = physics.RigidBody.velocity;
             Vector3 newVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
             physics.RigidBody.velocity = newVelocity;
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(animationData.FallParameterHash);
+
+            animator.applyRootMotion = true;
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            StopAnimation(animationData.FallParameterHash);
 
+            if (physics.IsGround)
+                FinishFall();
+            
             LimitVerticalVelocity();
         }
 
         protected override void OnContactWithGround(Collider collider)
+        {
+            FinishFall();
+        }
+
+        private void FinishFall()
         {
             var currentPosition = stateMachine.Player.transform.position;
             float fallDistance = Mathf.Abs(enterPosition.y - currentPosition.y);
@@ -45,18 +61,13 @@ namespace BattleZZang
                 return;
             }
 
-            if (movementShareData.IsWalk && !movementShareData.IsSprint ||  movementShareData.MovementInput == Vector2.zero)
+            if (movementShareData.IsWalk && !movementShareData.IsSprint || movementShareData.MovementInput == Vector2.zero)
             {
                 stateMachine.Change(stateMachine.HardLand);
                 return;
             }
 
             stateMachine.Change(stateMachine.Roll);
-        }
-
-        protected override void ResetSprintState()
-        {
-
         }
 
         private void LimitVerticalVelocity()

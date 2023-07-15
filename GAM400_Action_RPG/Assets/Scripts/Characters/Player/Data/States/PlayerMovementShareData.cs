@@ -15,7 +15,6 @@ namespace BattleZZang
         public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
 
 
-
         private Vector3 currentTargetRotation;
         private Vector3 timeToReachTargetRotation;
         private Vector3 dampedTargetRotationCurrentVelocity;

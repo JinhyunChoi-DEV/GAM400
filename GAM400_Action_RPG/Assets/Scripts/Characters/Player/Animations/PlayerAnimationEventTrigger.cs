@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleZZang
@@ -10,7 +8,7 @@ namespace BattleZZang
 
         private void Awake()
         {
-            player = transform.parent.GetComponent<Player>();
+            player = transform.GetComponent<Player>();
         }
 
         public void TriggerOnMoveStateAnimationEnterEvent()
