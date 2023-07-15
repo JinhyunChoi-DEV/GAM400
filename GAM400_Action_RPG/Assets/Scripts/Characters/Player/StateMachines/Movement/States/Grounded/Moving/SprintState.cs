@@ -6,10 +6,7 @@ namespace BattleZZang
     public class SprintState : PlayerMovingState
     {
         private PlayerSprintData sprintData;
-
-        private float startTime;
         private bool isSprint;
-        private bool needToReset;
 
         public SprintState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
         {
@@ -19,25 +16,21 @@ namespace BattleZZang
         public override void Enter()
         {
             movementShareData.MoveSpeedModifier = sprintData.SpeedModifier;
-
-            base.Enter();
+            isSprint = true;
             StartAnimation(animationData.SprintParameterHash);
 
+            base.Enter();
+
             movementShareData.CurrentJumpForce = airborneData.JumpData.StrongForce;
-            needToReset = true;
-            startTime = Time.time;
         }
 
         public override void Exit()
         {
-            base.Exit();
             StopAnimation(animationData.SprintParameterHash);
 
-            if (needToReset)
-            {
-                isSprint = false;
-                movementShareData.IsSprint = false;
-            }
+            base.Exit();
+
+            isSprint = false;
         }
 
         public override void Update()
@@ -45,10 +38,6 @@ namespace BattleZZang
             base.Update();
 
             if (isSprint)
-                return;
-
-
-            if (Time.time < startTime + sprintData.SprintTime)
                 return;
 
             StopSprint();
@@ -69,20 +58,19 @@ namespace BattleZZang
         {
             base.AddInputActionCallback();
 
-            input.PlayerActions.Sprint.performed += OnSprint;
+            input.PlayerActions.Sprint.canceled += FinishSprint;
         }
 
         protected override void RemoveInputActionCallback()
         {
             base.RemoveInputActionCallback();
 
-            input.PlayerActions.Sprint.performed -= OnSprint;
+            input.PlayerActions.Sprint.canceled -= FinishSprint;
         }
 
-        private void OnSprint(InputAction.CallbackContext obj)
+        private void FinishSprint(InputAction.CallbackContext obj)
         {
-            isSprint = true;
-            movementShareData.IsSprint = true;
+            isSprint = false;
         }
 
         protected override void OnMoveCanceled(InputAction.CallbackContext context)
@@ -90,19 +78,6 @@ namespace BattleZZang
             stateMachine.Change(stateMachine.HardStop);
 
             base.OnMoveCanceled(context);
-        }
-
-        protected override void OnJumpStarted(InputAction.CallbackContext context)
-        {
-            base.OnJumpStarted(context);
-
-            needToReset = false;
-        }
-
-        protected override void OnFall()
-        {
-            needToReset = false;
-            base.OnFall();
         }
     }
 }

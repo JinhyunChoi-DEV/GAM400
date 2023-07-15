@@ -8,7 +8,6 @@ namespace BattleZZang
         public IdleState Idle { get; }
         public WalkState Walk { get; }
         public RunState Run { get; }
-        public DashState Dash { get; }
         public SprintState Sprint{ get; }
 
         public LightStopState LightStop { get; }
@@ -29,8 +28,7 @@ namespace BattleZZang
 
             Idle = new IdleState(this);
             Walk = new WalkState(this);
-            Run = new RunState(this); 
-            Dash = new DashState(this);
+            Run = new RunState(this);
             Sprint = new SprintState(this);
 
             LightStop = new LightStopState(this);

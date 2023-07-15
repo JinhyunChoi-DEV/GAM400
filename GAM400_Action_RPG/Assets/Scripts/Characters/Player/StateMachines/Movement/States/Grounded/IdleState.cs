@@ -32,6 +32,12 @@ namespace BattleZZang
         {
             base.Update();
 
+            //animator.SetInteger(animationData.IdleTurningDirectionHash, movementShareData.RotationDirection);
+
+            ////TODO: doingRotation 넣어야함
+            //bool needRotate = Mathf.Abs(movementShareData.RotationAngle) > 90.0f;
+            //animator.SetBool(animationData.NeedRotateHash, needRotate);
+
             if (movementShareData.MovementInput == Vector2.zero)
                 return;
 

@@ -21,6 +21,7 @@ namespace BattleZZang
         {
             base.Exit();
 
+            ResetVelocity();
             StopAnimation(animationData.StopParameterHash);
         }
 

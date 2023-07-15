@@ -24,6 +24,7 @@ namespace BattleZZang
 
             isKeepRotate = movementShareData.MovementInput != Vector2.zero;
 
+            animator.applyRootMotion = false;
             Jump();
         }
         public override void Exit()
@@ -32,6 +33,7 @@ namespace BattleZZang
 
             SetBaseRotationData();
 
+            animator.applyRootMotion = true;
             isFalling = false;
         }
 
@@ -102,6 +104,7 @@ namespace BattleZZang
 
             ResetVelocity();
 
+            Debug.Log(jumpForce);
             physics.RigidBody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
 

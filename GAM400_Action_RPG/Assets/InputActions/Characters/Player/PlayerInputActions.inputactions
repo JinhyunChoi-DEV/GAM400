@@ -42,21 +42,12 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Dash",
+                    "name": "Sprint",
                     "type": "Button",
                     "id": "d4837e00-0231-4fad-85e5-2f2afc311940",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Sprint",
-                    "type": "Button",
-                    "id": "768bab1e-cd02-4339-9bb1-867fe21bc01d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold(duration=1)",
                     "initialStateCheck": false
                 },
                 {
@@ -165,35 +156,13 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ffac77d6-a56d-4384-8bff-b32d368dd29b",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "159b7377-0740-4e57-aa4b-96bed64fb628",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d90eee16-8b94-4124-b441-31c5f744c9ad",
+                    "id": "ffac77d6-a56d-4384-8bff-b32d368dd29b",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",

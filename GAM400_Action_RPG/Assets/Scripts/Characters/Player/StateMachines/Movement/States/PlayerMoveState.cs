@@ -17,6 +17,7 @@ namespace BattleZZang
         protected PlayerMovementShareData movementShareData => stateMachine.MovementShareData;
         protected Animator animator => stateMachine.Player.Animator;
         protected PlayerAnimationData animationData => stateMachine.Player.AnimationData;
+        protected PlayerLookAt lookAt => stateMachine.Player.LookAt;
 
         public PlayerMoveState(PlayerMoveStateMachine stateMachine)
         {
@@ -46,7 +47,6 @@ namespace BattleZZang
         {
             RemoveInputActionCallback();
         }
-
 
         public virtual void HandleInput()
         {
@@ -79,6 +79,10 @@ namespace BattleZZang
                 return;
             }
         }
+
+        public virtual void OnAnimatorIK(int layerIndex)
+        { }
+
 
         public void OnTriggerExit(Collider collider)
         {

@@ -5,8 +5,12 @@ namespace BattleZZang
 {
     public class PlayerGroundedState : PlayerMoveState
     {
+        protected PlayerFeetGrounder feetIK;
+
         public PlayerGroundedState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
-        { }
+        {
+            feetIK = new PlayerFeetGrounder(stateMachine.Player);
+        }
 
         public override void Enter()
         {
@@ -46,13 +50,22 @@ namespace BattleZZang
 
             if(needRecentering)
                 UpdateCameraRecentering(movementShareData.MovementInput);
+
+            feetIK.UpdateFeetPosition();
+        }
+
+        public override void OnAnimatorIK(int layerIndex)
+        {
+            base.OnAnimatorIK(layerIndex);
+
+            feetIK.OnAnimatorIK(layerIndex);
         }
 
         protected override void AddInputActionCallback()
         {
             base.AddInputActionCallback();
 
-            input.PlayerActions.Dash.started += OnDashStarted;
+            input.PlayerActions.Sprint.started += OnSprintStarted;
             input.PlayerActions.Jump.started += OnJumpStarted;
         }
 
@@ -60,8 +73,13 @@ namespace BattleZZang
         {
             base.RemoveInputActionCallback();
 
-            input.PlayerActions.Dash.started -= OnDashStarted;
+            input.PlayerActions.Sprint.started -= OnSprintStarted;
             input.PlayerActions.Jump.started -= OnJumpStarted;
+        }
+
+        private void OnSprintStarted(InputAction.CallbackContext obj)
+        {
+            stateMachine.Change(stateMachine.Sprint);
         }
 
         protected override void OnContactWithGroundExit(Collider collider)
@@ -77,11 +95,6 @@ namespace BattleZZang
 
             if(!result.IsCasted)
                 OnFall();
-        }
-
-        protected virtual void OnDashStarted(InputAction.CallbackContext context)
-        {
-            stateMachine.Change(stateMachine.Dash);
         }
 
         protected virtual void OnMove()

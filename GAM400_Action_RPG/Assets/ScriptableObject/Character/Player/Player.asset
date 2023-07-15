@@ -142,14 +142,7 @@ MonoBehaviour:
         <WaitTime>k__BackingField: -1
         <RecenteringTime>k__BackingField: -1
     <RunData>k__BackingField:
-      <SpeedModifier>k__BackingField: 1
-    <DashData>k__BackingField:
-      <SpeedModifer>k__BackingField: 2
-      <RotationData>k__BackingField:
-        <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.02, z: 0}
-      <TimeToConsideredConsecutive>k__BackingField: 1
-      <ConsecutiveLimitCount>k__BackingField: 2
-      <DashLimitCooldown>k__BackingField: 1.75
+      <SpeedModifier>k__BackingField: 0.7
     <SprintData>k__BackingField:
       <SpeedModifier>k__BackingField: 1.7
       <SprintTime>k__BackingField: 1
@@ -272,10 +265,10 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      <StationaryForce>k__BackingField: {x: 0, y: 5, z: 0}
-      <WeakForce>k__BackingField: {x: 1, y: 5, z: 1}
-      <MediumForce>k__BackingField: {x: 3.5, y: 5, z: 3.5}
-      <StrongForce>k__BackingField: {x: 5, y: 5, z: 5}
+      <StationaryForce>k__BackingField: {x: 0, y: 6, z: 0}
+      <WeakForce>k__BackingField: {x: 3, y: 6, z: 3}
+      <MediumForce>k__BackingField: {x: 5, y: 6, z: 5}
+      <StrongForce>k__BackingField: {x: 8, y: 6, z: 8}
       <DecelerationForce>k__BackingField: 1.5
     <FallData>k__BackingField:
       <FallSpeedLimit>k__BackingField: 15

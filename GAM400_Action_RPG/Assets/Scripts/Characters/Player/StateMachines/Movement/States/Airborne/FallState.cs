@@ -21,15 +21,23 @@ namespace BattleZZang
 
             movementShareData.MoveSpeedModifier = 0.0f;
 
+            animator.applyRootMotion = false;
             var currentVelocity = physics.RigidBody.velocity;
             Vector3 newVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
             physics.RigidBody.velocity = newVelocity;
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(animationData.FallParameterHash);
+
+            animator.applyRootMotion = true;
+        }
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            StopAnimation(animationData.FallParameterHash);
 
             LimitVerticalVelocity();
         }

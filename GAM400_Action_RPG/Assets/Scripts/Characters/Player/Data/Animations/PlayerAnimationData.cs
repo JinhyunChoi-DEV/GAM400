@@ -15,7 +15,6 @@ namespace BattleZZang
 
         [Header("Grounded Parameter Names")]
         [SerializeField] private string idleParameterName = "IsIdle";
-        [SerializeField] private string dashParameterName = "IsDash";
         [SerializeField] private string walkParameterName = "IsWalk";
         [SerializeField] private string runParameterName = "IsRun";
         [SerializeField] private string sprintParameterName = "IsSprint";
@@ -23,6 +22,9 @@ namespace BattleZZang
         [SerializeField] private string hardStopParameterName = "IsHardStop";
         [SerializeField] private string rollParameterName = "IsRoll";
         [SerializeField] private string hardLandParameterName = "IsHardLand";
+        [SerializeField] private string idleTurningDirectionParameterName = "IdleTurningDirection";
+        [SerializeField] private string doingRotationParameterName = "DoingRotate";
+        [SerializeField] private string needRotateParameterName = "NeedRotate";
 
         [Header("Airborne Parameter Names")]
         [SerializeField] private string fallParameterName = "IsFall";
@@ -34,7 +36,6 @@ namespace BattleZZang
         public int AirborneParameterHash { get; private set; }
 
         public int IdleParameterHash { get; private set; }
-        public int DashParameterHash { get; private set; }
         public int WalkParameterHash { get; private set; }
         public int RunParameterHash { get; private set; }
         public int SprintParameterHash { get; private set; }
@@ -42,7 +43,9 @@ namespace BattleZZang
         public int HardStopParameterHash { get; private set; }
         public int RollParameterHash { get; private set; }
         public int HardLandParameterHash { get; private set; }
-
+        public int IdleTurningDirectionHash { get; private set; }
+        public int DoingRotationHash { get; private set; }
+        public int NeedRotateHash { get; private set; }
         public int FallParameterHash { get; private set; }
 
         public void Initialize()
@@ -54,7 +57,6 @@ namespace BattleZZang
             AirborneParameterHash = Animator.StringToHash(airborneParameterName);
 
             IdleParameterHash = Animator.StringToHash(idleParameterName);
-            DashParameterHash = Animator.StringToHash(dashParameterName);
             WalkParameterHash = Animator.StringToHash(walkParameterName);
             RunParameterHash = Animator.StringToHash(runParameterName);
             SprintParameterHash = Animator.StringToHash(sprintParameterName);
@@ -62,6 +64,9 @@ namespace BattleZZang
             HardStopParameterHash = Animator.StringToHash(hardStopParameterName);
             RollParameterHash = Animator.StringToHash(rollParameterName);
             HardLandParameterHash = Animator.StringToHash(hardLandParameterName);
+            IdleTurningDirectionHash = Animator.StringToHash(idleTurningDirectionParameterName);
+            DoingRotationHash = Animator.StringToHash(doingRotationParameterName);
+            NeedRotateHash = Animator.StringToHash(needRotateParameterName);
 
             FallParameterHash = Animator.StringToHash(fallParameterName);
         }
