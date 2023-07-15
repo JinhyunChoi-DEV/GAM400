@@ -23,7 +23,6 @@ namespace BattleZZang
         [field:Header("Collisions")]
         [field: SerializeField] public PlayerCapsuleColliderUtility Collider { get; private set; }
         [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
-        [field: SerializeField] public PlayerFeetIKData FeetIKData { get; private set; }
 
         [SerializeField] private Player player;
 

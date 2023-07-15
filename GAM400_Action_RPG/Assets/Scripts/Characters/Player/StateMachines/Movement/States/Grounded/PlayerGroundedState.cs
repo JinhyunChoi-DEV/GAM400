@@ -5,12 +5,8 @@ namespace BattleZZang
 {
     public class PlayerGroundedState : PlayerMoveState
     {
-        protected PlayerFeetGrounder feetIK;
-
         public PlayerGroundedState(PlayerMoveStateMachine stateMachine) : base(stateMachine)
-        {
-            feetIK = new PlayerFeetGrounder(stateMachine.Player);
-        }
+        { }
 
         public override void Enter()
         {
@@ -50,15 +46,13 @@ namespace BattleZZang
 
             if(needRecentering)
                 UpdateCameraRecentering(movementShareData.MovementInput);
-
-            //feetIK.UpdateFeetPosition();
         }
 
         public override void OnAnimatorIK(int layerIndex)
         {
             base.OnAnimatorIK(layerIndex);
 
-            //feetIK.OnAnimatorIK(layerIndex);
+            UpdateFeetIK();
         }
 
         protected override void AddInputActionCallback()
@@ -122,6 +116,36 @@ namespace BattleZZang
         protected virtual void OnFall()
         {
             stateMachine.Change(stateMachine.Fall);
+        }
+
+        private void UpdateFeetIK()
+        {
+            var transform = stateMachine.Player.transform;
+
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
+            RaycastHit hit;
+            Ray ray = new Ray(animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down);
+            if (Physics.Raycast(ray, out hit, moveData.FeetIKOffset + 1.0f, physics.LayerData.GroundLayer))
+            {
+                Vector3 footPosition = hit.point;
+                footPosition.y += moveData.FeetIKOffset;
+                animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
+                Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
+                animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(forward, hit.normal));
+            }
+
+            animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1);
+            ray = new Ray(animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
+            if (Physics.Raycast(ray, out hit, moveData.FeetIKOffset + 1.0f, physics.LayerData.GroundLayer))
+            {
+                Vector3 footPosition = hit.point;
+                footPosition.y += moveData.FeetIKOffset;
+                animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
+                Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
+                animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(forward, hit.normal));
+            }
         }
     }
 }
