@@ -51,14 +51,14 @@ namespace BattleZZang
             if(needRecentering)
                 UpdateCameraRecentering(movementShareData.MovementInput);
 
-            feetIK.UpdateFeetPosition();
+            //feetIK.UpdateFeetPosition();
         }
 
         public override void OnAnimatorIK(int layerIndex)
         {
             base.OnAnimatorIK(layerIndex);
 
-            feetIK.OnAnimatorIK(layerIndex);
+            //feetIK.OnAnimatorIK(layerIndex);
         }
 
         protected override void AddInputActionCallback()

@@ -21,5 +21,17 @@ namespace BattleZZang
             base.Exit();
             StopAnimation(animationData.MoveParameterHash);
         }
+
+        public override void Update()
+        {
+            base.Update();
+
+            feetIK.UpdateFeetPosition();
+        }
+
+        public override void OnAnimatorIK(int layerIndex)
+        {
+            feetIK.OnAnimatorIK(layerIndex);
+        }
     }
 }

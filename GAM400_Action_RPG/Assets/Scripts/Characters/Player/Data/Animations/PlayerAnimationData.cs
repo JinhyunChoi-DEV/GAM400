@@ -22,9 +22,6 @@ namespace BattleZZang
         [SerializeField] private string hardStopParameterName = "IsHardStop";
         [SerializeField] private string rollParameterName = "IsRoll";
         [SerializeField] private string hardLandParameterName = "IsHardLand";
-        [SerializeField] private string idleTurningDirectionParameterName = "IdleTurningDirection";
-        [SerializeField] private string doingRotationParameterName = "DoingRotate";
-        [SerializeField] private string needRotateParameterName = "NeedRotate";
 
         [Header("Airborne Parameter Names")]
         [SerializeField] private string fallParameterName = "IsFall";
@@ -43,9 +40,6 @@ namespace BattleZZang
         public int HardStopParameterHash { get; private set; }
         public int RollParameterHash { get; private set; }
         public int HardLandParameterHash { get; private set; }
-        public int IdleTurningDirectionHash { get; private set; }
-        public int DoingRotationHash { get; private set; }
-        public int NeedRotateHash { get; private set; }
         public int FallParameterHash { get; private set; }
 
         public void Initialize()
@@ -64,9 +58,6 @@ namespace BattleZZang
             HardStopParameterHash = Animator.StringToHash(hardStopParameterName);
             RollParameterHash = Animator.StringToHash(rollParameterName);
             HardLandParameterHash = Animator.StringToHash(hardLandParameterName);
-            IdleTurningDirectionHash = Animator.StringToHash(idleTurningDirectionParameterName);
-            DoingRotationHash = Animator.StringToHash(doingRotationParameterName);
-            NeedRotateHash = Animator.StringToHash(needRotateParameterName);
 
             FallParameterHash = Animator.StringToHash(fallParameterName);
         }

@@ -13,8 +13,6 @@ namespace BattleZZang
         public Vector3 CurrentJumpForce { get; set; }
         public List<PlayerCameraRecenteringData> SidewaysCameraRecenteringData { get; set; }
         public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
-        public float RotationAngle { get; set; }
-        public int RotationDirection { get; set; }
 
 
         private Vector3 currentTargetRotation;

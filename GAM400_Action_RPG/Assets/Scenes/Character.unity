@@ -7436,7 +7436,7 @@ MonoBehaviour:
         <RayOffset>k__BackingField: 0.05
       <SlopeData>k__BackingField:
         <StepHeightPercentage>k__BackingField: 0.25
-        <FloatDistance>k__BackingField: 2
+        <FloatDistance>k__BackingField: 1.5
         <StepReachForce>k__BackingField: 15
     <TriggerColliderData>k__BackingField:
       <GroundCheckCollider>k__BackingField: {fileID: 2492390}
@@ -7499,9 +7499,6 @@ MonoBehaviour:
     hardStopParameterName: IsHardStop
     rollParameterName: IsRoll
     hardLandParameterName: IsHardLand
-    idleTurningDirectionParameterName: 
-    doingRotationParameterName: 
-    needRotateParameterName: 
     fallParameterName: IsFall
   <LookAt>k__BackingField:
     <LookAtTransform>k__BackingField: {fileID: 337242435}
@@ -7537,7 +7534,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 3d608dd302e256f45903cdfd70405716, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

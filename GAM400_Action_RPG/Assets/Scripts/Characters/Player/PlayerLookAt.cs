@@ -11,21 +11,19 @@ namespace BattleZZang
         [field: SerializeField] [field: Range(0.1f, 5.0f)] public float Radius { get; private set; } = 0.5f;
         [field: SerializeField] public bool ShowDebug { get; private set; }
 
-        private PlayerMovementShareData data;
         private Transform debugObject;
 
-        public void Initialize(PlayerMovementShareData data)
+        public void Initialize()
         {
-            this.data = data;
             debugObject = LookAtTransform.GetChild(0);
         }
 
-        public void Update()
+        public void Update(float angle)
         {
             debugObject.gameObject.SetActive(ShowDebug);
 
-            float targetAngle = data.RotationAngle;
-            if (Mathf.Abs(data.RotationAngle) > 90)
+            float targetAngle = angle;
+            if (Mathf.Abs(angle) > 90)
                 targetAngle = (Math.Sign(targetAngle) == 1) ? 90.0f : -90.0f;
 
             float radian = Mathf.Deg2Rad * targetAngle;

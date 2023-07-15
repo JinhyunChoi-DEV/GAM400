@@ -25,9 +25,9 @@ namespace BattleZZang
 
             CameraUtility.Initialize();
             AnimationData.Initialize();
-            MoveStateMachine = new PlayerMoveStateMachine(this);
+            LookAt.Initialize();
 
-            LookAt.Initialize(MoveStateMachine.MovementShareData);
+            MoveStateMachine = new PlayerMoveStateMachine(this);
         }
 
         void Start()
