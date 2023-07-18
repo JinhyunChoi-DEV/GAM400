@@ -19,22 +19,17 @@ namespace BattleZZang
             movementShareData.MoveSpeedModifier = moveData.RunData.SpeedModifier;
 
             base.Enter();
-            StartAnimation(animationData.RunParameterHash);
 
             movementShareData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
             startTime = Time.time;
         }
 
-        public override void Exit()
-        {
-            base.Exit();
-            StopAnimation(animationData.RunParameterHash);
-        }
-
         public override void Update()
         {
             base.Update();
+
+            animator.SetFloat(animationData.MoveSpeedParameterHash, 0.5f, 0.4f, Time.deltaTime);
 
             if (!movementShareData.IsWalk)
                 return;
