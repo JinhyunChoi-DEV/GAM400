@@ -17,7 +17,6 @@ namespace BattleZZang
         {
             movementShareData.MoveSpeedModifier = sprintData.SpeedModifier;
             isSprint = true;
-            StartAnimation(animationData.SprintParameterHash);
 
             base.Enter();
 
@@ -26,8 +25,6 @@ namespace BattleZZang
 
         public override void Exit()
         {
-            StopAnimation(animationData.SprintParameterHash);
-
             base.Exit();
 
             isSprint = false;
@@ -36,6 +33,8 @@ namespace BattleZZang
         public override void Update()
         {
             base.Update();
+
+            animator.SetFloat(animationData.MoveSpeedParameterHash, 1.0f, 0.4f, Time.deltaTime);
 
             if (isSprint)
                 return;

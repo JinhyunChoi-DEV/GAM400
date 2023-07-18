@@ -15,9 +15,10 @@ namespace BattleZZang
 
         [Header("Grounded Parameter Names")]
         [SerializeField] private string idleParameterName = "IsIdle";
-        [SerializeField] private string walkParameterName = "IsWalk";
-        [SerializeField] private string runParameterName = "IsRun";
-        [SerializeField] private string sprintParameterName = "IsSprint";
+        //[SerializeField] private string walkParameterName = "IsWalk";
+        //[SerializeField] private string runParameterName = "IsRun";
+        //[SerializeField] private string sprintParameterName = "IsSprint";
+        [SerializeField] private string moveSpeedParameterName = "MoveValue";
         [SerializeField] private string mediumStopParameterName = "IsMediumStop";
         [SerializeField] private string hardStopParameterName = "IsHardStop";
         [SerializeField] private string rollParameterName = "IsRoll";
@@ -33,9 +34,10 @@ namespace BattleZZang
         public int AirborneParameterHash { get; private set; }
 
         public int IdleParameterHash { get; private set; }
-        public int WalkParameterHash { get; private set; }
-        public int RunParameterHash { get; private set; }
-        public int SprintParameterHash { get; private set; }
+        //public int WalkParameterHash { get; private set; }
+        //public int RunParameterHash { get; private set; }
+        //public int SprintParameterHash { get; private set; }
+        public int MoveSpeedParameterHash { get; private set; }
         public int MediumStopParameterHash { get; private set; }
         public int HardStopParameterHash { get; private set; }
         public int RollParameterHash { get; private set; }
@@ -51,9 +53,7 @@ namespace BattleZZang
             AirborneParameterHash = Animator.StringToHash(airborneParameterName);
 
             IdleParameterHash = Animator.StringToHash(idleParameterName);
-            WalkParameterHash = Animator.StringToHash(walkParameterName);
-            RunParameterHash = Animator.StringToHash(runParameterName);
-            SprintParameterHash = Animator.StringToHash(sprintParameterName);
+            MoveSpeedParameterHash = Animator.StringToHash(moveSpeedParameterName);
             MediumStopParameterHash = Animator.StringToHash(mediumStopParameterName);
             HardStopParameterHash = Animator.StringToHash(hardStopParameterName);
             RollParameterHash = Animator.StringToHash(rollParameterName);

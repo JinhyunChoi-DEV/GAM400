@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BattleZZang
@@ -13,7 +14,6 @@ namespace BattleZZang
             movementShareData.BackwardsCameraRecenteringData = moveData.WalkData.BackwardsCameraRecenteringData;
 
             base.Enter();
-            StartAnimation(animationData.WalkParameterHash);
 
             movementShareData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
@@ -22,8 +22,14 @@ namespace BattleZZang
         {
             base.Exit();
 
-            StopAnimation(animationData.WalkParameterHash);
             SetBaseCameraRecentering();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            animator.SetFloat(animationData.MoveSpeedParameterHash, 0.0f, 0.4f, Time.deltaTime);
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
