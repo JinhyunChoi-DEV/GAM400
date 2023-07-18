@@ -46,7 +46,7 @@ namespace BattleZZang
         {
             if (movementShareData.MovementInput == Vector2.zero)
             {
-                stateMachine.Change(stateMachine.Idle);
+                stateMachine.Change(stateMachine.HardStop);
                 return;
             }
 

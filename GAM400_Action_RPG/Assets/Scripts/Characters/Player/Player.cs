@@ -10,6 +10,7 @@ namespace BattleZZang
         [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
         [field: SerializeField] public PlayerLookAt LookAt { get; private set; }
         [field: SerializeField] public Animator Animator { get; private set; }
+        [field: SerializeField] public bool ActiveIK { get; private set; } = true;
 
         public PlayerInput Input { get; private set; }
         public PlayerPhysics Physics { get; private set; }

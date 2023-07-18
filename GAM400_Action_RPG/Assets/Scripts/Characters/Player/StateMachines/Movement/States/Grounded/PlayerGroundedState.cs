@@ -52,7 +52,9 @@ namespace BattleZZang
         {
             base.OnAnimatorIK(layerIndex);
 
-            UpdateFeetIK();
+
+            if(stateMachine.Player.ActiveIK)
+                UpdateFeetIK();
         }
 
         protected override void AddInputActionCallback()
