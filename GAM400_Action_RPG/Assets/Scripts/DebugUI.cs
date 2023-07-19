@@ -24,6 +24,9 @@ namespace BattleZZang
         {
             if(player.MoveStateMachine != null)
                 stateText.text = player.MoveStateMachine.GetState();
+
+            if (Input.GetKey(KeyCode.Escape))
+                Application.Quit();
         }
 
         private void IKToggle(bool isActive)
