@@ -38,8 +38,6 @@ namespace BattleZZang
 
         public virtual void Enter()
         {
-            Debug.Log("State: " + GetType().Name);
-
             AddInputActionCallback();
         }
 

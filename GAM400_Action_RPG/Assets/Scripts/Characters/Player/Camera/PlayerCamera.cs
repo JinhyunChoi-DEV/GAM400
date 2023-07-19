@@ -28,12 +28,6 @@ namespace BattleZZang
             camera.Follow = cameraTarget;
             CameraTransform = Camera.main.transform;
         }
-        
-        void Start()
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
 
         // Update is called once per frame
         void Update()

@@ -59,5 +59,13 @@ namespace BattleZZang
         {
             current?.OnAnimatorIK(layerIndex);
         }
+
+        public string GetState()
+        {
+            if (current == null)
+                return string.Empty;
+
+            return current.GetType().Name;
+        }
     }
 }

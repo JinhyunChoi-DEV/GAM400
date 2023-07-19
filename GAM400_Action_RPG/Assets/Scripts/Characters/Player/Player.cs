@@ -8,9 +8,9 @@ namespace BattleZZang
         [field: SerializeField] public PlayerSO Data { get; private set; }
         [field: SerializeField] public PlayerCameraUtility CameraUtility { get; private set; }
         [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
-        [field: SerializeField] public PlayerLookAt LookAt { get; private set; }
+        [field: SerializeField] public PlayerLookAt LookAt;
         [field: SerializeField] public Animator Animator { get; private set; }
-        [field: SerializeField] public bool ActiveIK { get; private set; } = true;
+        [field: SerializeField] public bool ActiveIK = true;
 
         public PlayerInput Input { get; private set; }
         public PlayerPhysics Physics { get; private set; }
@@ -65,7 +65,8 @@ namespace BattleZZang
 
         private void OnAnimatorIK(int layerIndex)
         {
-            MoveStateMachine.OnAnimatorIK(layerIndex);
+            if(ActiveIK)
+                MoveStateMachine.OnAnimatorIK(layerIndex);
         }
     }
 }

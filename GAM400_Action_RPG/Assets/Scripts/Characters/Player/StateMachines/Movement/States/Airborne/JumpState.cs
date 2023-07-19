@@ -104,7 +104,6 @@ namespace BattleZZang
 
             ResetVelocity();
 
-            Debug.Log(jumpForce);
             physics.RigidBody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
 

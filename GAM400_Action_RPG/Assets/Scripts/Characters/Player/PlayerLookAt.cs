@@ -9,7 +9,7 @@ namespace BattleZZang
         [field: SerializeField] public Transform LookAtTransform { private set; get; }
 
         [field: SerializeField] [field: Range(0.1f, 5.0f)] public float Radius { get; private set; } = 0.5f;
-        [field: SerializeField] public bool ShowDebug { get; private set; }
+        [field: SerializeField] public bool ShowDebug;
 
         private Transform debugObject;
 

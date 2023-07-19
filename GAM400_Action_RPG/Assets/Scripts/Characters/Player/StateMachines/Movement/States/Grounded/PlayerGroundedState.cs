@@ -52,9 +52,7 @@ namespace BattleZZang
         {
             base.OnAnimatorIK(layerIndex);
 
-
-            if(stateMachine.Player.ActiveIK)
-                UpdateFeetIK();
+            UpdateFeetIK();
         }
 
         protected override void AddInputActionCallback()
@@ -75,6 +73,9 @@ namespace BattleZZang
 
         private void OnSprintStarted(InputAction.CallbackContext obj)
         {
+            if(movementShareData.MovementInput == Vector2.zero) 
+                return;
+
             stateMachine.Change(stateMachine.Sprint);
         }
 
